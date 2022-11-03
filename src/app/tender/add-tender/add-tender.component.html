@@ -1,0 +1,289 @@
+<div class="container">
+    <div class="row">
+        <div class="col-11">
+            <h2>Add Tender</h2>
+        </div>
+        <div class="col" style="margin-left: 45px;">
+            <mat-icon style="background-color: rgb(211, 50, 50);" routerLink="/tenders">arrow_back</mat-icon>
+        </div>
+    </div>
+
+    <div class="row">
+        <form [formGroup]="tenderForm" (ngSubmit)="onSubmit()">
+            <mat-card>
+                <h3>Add New Tender</h3>
+                <div class="row">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-form-field appearance="fill" class="w-100">
+                                <mat-label>Country</mat-label>
+                                <mat-select formControlName="country">
+                                    <mat-option *ngFor="let country of countryDropdownArray" [value]="country.id">
+                                        {{country.name}} </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-md-4">
+                            <mat-form-field appearance="fill" class="w-100">
+                                <mat-label>Select Govt Body</mat-label>
+                                <mat-select formControlName="govtBody"
+                                    (selectionChange)="getMinistryDropdown()">
+                                    <mat-option *ngFor="let govt of govtBodyArray" [value]="govt.id">{{govt.name}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="formControls['govtBody'].hasError('required')">Select govtBody</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-md-4">
+                            <mat-form-field appearance="fill" class="w-100">
+                                <mat-label *ngIf="tenderForm.value.govtBody != 3">Select Ministry</mat-label>
+                                <mat-label *ngIf="tenderForm.value.govtBody == 3">Select PSU</mat-label>
+                                <mat-select formControlName="ministry" (selectionChange)="getZoneDropdown()">
+                                    <mat-option *ngFor="let ministry of ministryDropdownArray" [value]="ministry.id">
+                                        {{ministry.name}} </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="formControls['ministry'].hasError('required')">Select Ministry</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4" *ngIf="tenderForm.value.govtBody == 2 || tenderForm.value.govtBody == 3">
+                            <mat-form-field appearance="fill" class="w-100">
+                                <mat-label>Select State</mat-label>
+                                <mat-select formControlName="state"
+                                    (selectionChange)="getZoneDropdown();getDistrictDropdown()">
+                                    <mat-option *ngFor="let state of stateDropdownArray" [value]="state.id">
+                                        {{state.name}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="formControls['state'].hasError('required')">Select state</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-md-4" *ngIf="tenderForm.value.govtBody != 3">
+                            <mat-form-field appearance="fill" class="w-100">
+                                <mat-label>Select Zone/Region</mat-label>
+                                <mat-select formControlName="zone" (selectionChange)="getDistDivisionDropdown()">
+                                    <mat-option *ngFor="let zone of zoneDropdownArray" [value]="zone.id">{{zone.name}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="formControls['zone'].hasError('required')">Select zone</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-md-4">
+                            <ng-container *ngIf="tenderForm.value.govtBody != '3'">
+                                <mat-form-field appearance="fill" class="w-100">
+                                    <mat-label>Select Dist/Division</mat-label>
+                                    <mat-select formControlName="division_District">
+                                        <mat-option *ngFor="let dist of distDivisionDropdownArray" [value]="dist.id">
+                                            {{dist.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="formControls['division_District'].hasError('required')">Select Dist/Division</mat-error>
+                                </mat-form-field>
+                            </ng-container>
+
+                            <ng-container *ngIf="tenderForm.value.govtBody == '3'">
+                                <mat-form-field appearance="fill" class="w-100">
+                                    <mat-label>Select District</mat-label>
+                                    <mat-select formControlName="district">
+                                        <mat-option *ngFor="let dist of districtDeopdownArray" [value]="dist.id">
+                                            {{dist.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="formControls['district'].hasError('required')">Select District</mat-error>
+                                </mat-form-field>
+                            </ng-container>
+                        </div>
+
+                        <div class="col-md-4">
+                            <mat-form-field appearance="fill" class="w-100">
+                                <mat-label>Select Category</mat-label>
+                                <mat-select formControlName="category" (selectionChange)="getExpertiseAreaDropdown()">
+                                    <mat-option *ngFor="let category of categoryDropdownArray" [value]="category.id">
+                                        {{category.name}} </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="formControls['category'].hasError('required')">Select category</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field appearance="fill" class="w-100">
+                                <mat-label>Select Expertise Area</mat-label>
+                                <mat-select formControlName="expertiseArea">
+                                    <mat-option *ngFor="let expertise of expertiseAreaArray" [value]="expertise.id">
+                                        {{expertise.name}}</mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="formControls['expertiseArea'].hasError('required')">Select Expertise Area</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-form-field appearance="fill" class="w-100">
+                                <mat-label>Tender ID</mat-label>
+                                <input type="text" matInput placeholder="Tender ID" formControlName="gov_TenderId">
+                                <mat-error *ngIf="formControls['gov_TenderId'].hasError('required')">Select Tender ID</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-md-4">
+                            <mat-form-field appearance="fill" class="w-100">
+                                <mat-label>Tender Amount</mat-label>
+                                <input type="text" matInput placeholder="Tender Amount" formControlName="tenderAmount"
+                                    (change)="findBookletPrice()">
+                                    <mat-error *ngIf="formControls['tenderAmount'].hasError('required')">Select Tender Amount</mat-error>
+                                    <mat-error *ngIf="formControls['tenderAmount'].hasError('pattern')">Please enter Tender Amount more than 10000</mat-error>
+                            </mat-form-field>
+                            <mat-hint style="font-size:x-small">(Note:Please enter Tender Amount more than 10000)
+                            </mat-hint>
+                        </div>
+
+                        <div class="col-md-4">
+                            <mat-form-field appearance="fill" class="w-100">
+                                <mat-label>Booklet Price</mat-label>
+                                <input type="text" matInput placeholder="Booklet Price" formControlName="bookletPrice">
+                            </mat-form-field>
+                            <mat-hint style="font-size:x-small">(Note:0.01% of booklet charges will be charged by
+                                CousultBuddy)</mat-hint>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-8">
+                            <mat-form-field appearance="fill" class="w-100">
+                                <mat-label>Tender Name</mat-label>
+                                <input type="text" matInput placeholder="Tender Name" formControlName="tenderName">
+                                <mat-error *ngIf="formControls['tenderName'].hasError('required')">Select Ministry</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-md-4">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Choose  date</mat-label>
+                                <input matInput [matDatepicker]="picker" [min]="minDate" formControlName="closingDate">
+                                <mat-hint>MM/DD/YYYY</mat-hint>
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                                <mat-error *ngIf="formControls['closingDate'].hasError('required')">Select closingDate</mat-error>
+                              </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">
+                            <mat-form-field appearance="fill" class="w-100">
+                                <mat-label>Description</mat-label>
+                                <textarea type="text" matInput placeholder="Description"
+                                    formControlName="description"></textarea>
+                                    <mat-error *ngIf="formControls['description'].hasError('required')">Select Ministry</mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="fill" class="w-100">
+                                <mat-label>Location</mat-label>
+                                <input type="text" matInput placeholder="Location" formControlName="locationName" #search >
+                            </mat-form-field>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="fill" class="w-100">
+                                        <mat-label>Latitude</mat-label>
+                                        <input type="text" matInput placeholder="Latitude" formControlName="latitude" (change)="getLocation()">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="fill" class="w-100">
+                                        <mat-label>Longitude</mat-label>
+                                        <input type="text" matInput placeholder="Longitude" formControlName="longitude" (change)="getLocation()">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <agm-map #AgmMap [maxZoom]="25" [zoom]="zoom" [latitude]="lat" [longitude]="lng" (mapClick)="mapClicked($event)"  [fitBounds]="true"  (zoomChange)="zoomChange($event)">
+                                <agm-marker #AgmMark  [agmFitBounds]="true" [latitude]="lat" [longitude]="lng" > 
+                                </agm-marker>
+                            </agm-map>
+                            
+                        </div>
+                    </div>
+                </div>
+            </mat-card>
+
+            <mat-card class="mt-5">
+                <h3>working Official Details</h3>
+                <div class="row">
+                    <div class="col-md-4">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Person Name</mat-label>
+                            <input type="text" matInput placeholder="Person Name" formControlName="personName">
+                            <mat-error *ngIf="formControls['personName'].hasError('required')">Select Ministry</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-md-4">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Designation</mat-label>
+                            <input type="text" matInput placeholder="Designation" formControlName="designation">
+                            <mat-error *ngIf="formControls['designation'].hasError('required')">Select Ministry</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-md-4">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Contact Number</mat-label>
+                            <input type="text" matInput placeholder="Contact Number" formControlName="contactNo">
+                            <mat-error *ngIf="formControls['contactNo'].hasError('required')">Select Ministry</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="row">
+                        <div>
+                            <label> Upload RFP</label>
+                            <mat-radio-group aria-label="Select an option">
+                                <mat-radio-button value="1" [checked]="rfpType == 'Document'" class="ms-3"
+                                    (click)="docAndLink('Document')">Document
+                                </mat-radio-button>
+                                <mat-radio-button value="2" [checked]="rfpType == 'Link'" class="ms-3"
+                                    (click)="docAndLink('Link')">Link
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-4">
+                            <ng-container *ngIf="rfpType == 'Document'">
+                                <label>select pdf</label><br>
+                                <input type="file" style="display: inline;" formControlName="tenderDocPath"
+                                    (change)="imageUpload($event,'pdf')"><br>
+                                <button *ngIf="showPDF" (click)="clearImg('pdf')">clear</button>
+                                <button *ngIf="editFlag && showPDF" (click)="viewPDF()">view pdf</button>
+                            </ng-container>
+                            <ng-container *ngIf="rfpType == 'Link'">
+                                <input type="text" matInput placeholder="RFP Link" formControlName="rfpDocLink">
+                            </ng-container>
+                        </div>
+                        <div class="col-md-4">
+                            <label>select image</label>
+                            <input type="file" style="display: inline;" formControlName="tenderImagePath"
+                                (change)="imageUpload($event,'img')"><br>
+                            <img [src]="profileImg" width="100px" height="100px">
+                            <ng-container *ngIf="profileImg">
+                                <button (click)="clearImg('img')">Clear</button>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-9"></div>
+                        <div class="col-3">
+                            <button mat-stroked-button type="reset" (click)="clearForm()">clear</button>
+                            <button mat-raised-button color="accent" class="ms-2" style="font-size:10px;"
+                                type="submit">{{editFlag ? 'Update Tender' :'Add Tender'}}</button>
+                        </div>
+                    </div>
+                </div>
+            </mat-card>
+        </form>
+    </div>
+</div>

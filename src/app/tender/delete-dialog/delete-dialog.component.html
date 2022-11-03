@@ -1,0 +1,11 @@
+ <ng-container >
+    <h1 mat-dialog-title>{{typeOfDialog == 'delete' ? 'Delete' : 'Tender Publish' }} </h1>
+    <div mat-dialog-content>
+        {{typeOfDialog == 'delete' ? 'Are you sure want to delete the record' : 'Do You Want To Publish The Tender?' }} 
+    </div>
+    <div mat-dialog-actions>
+      <button mat-button mat-dialog-close >{{typeOfDialog == 'delete' ? 'No' : 'cancel'}}</button>
+      <button mat-button mat-dialog-close cdkFocusInitial (click)="closeDialog('Yes')">{{typeOfDialog == 'delete' ? 'Yes' : 'Confirm'}}</button>
+    </div>
+ </ng-container>
+ 

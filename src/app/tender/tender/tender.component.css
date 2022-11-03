@@ -1,0 +1,39 @@
+table {
+    width: 100%;
+}
+
+tbody,
+td,
+tfoot,
+th,
+thead,
+tr {
+    border-color: inherit;
+    border-style: solid;
+    border-width: 0;
+    width: 40px;
+}
+
+mat-form-field {
+    width: 10%;
+}
+
+td.mat-cell {
+    padding: 16px 0;
+    border-bottom: 1px solid #80d1f1;
+    border-top: 1px solid #80d1f1;
+}
+
+td.mat-cell:first-child {
+    border-left: 1px solid #80d1f1;
+}
+
+td.mat-cell:last-child {
+    border-right: 1px solid #80d1f1;
+}
+
+th{
+    background-color: rgb(180, 219, 238);
+    color: black;
+    padding: 16px 0;
+}

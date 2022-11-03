@@ -1,0 +1,36 @@
+<p>view-details works!</p>
+<div class="container">
+    <div class="row">
+        <div class="row">
+            <div class="col-11"></div>
+            <div class="col" style="margin-left: 45px;">
+                <mat-icon style="background-color: rgb(211, 50, 50);" routerLink="/tenders">arrow_back</mat-icon>
+            </div>
+        </div>
+    
+        <mat-card *ngIf="viewObj">
+            <mat-card-title>
+           <div class="row">
+              <div class="col-4">
+               <h3>Tender Id :- {{viewObj.tenderId}}</h3>
+              </div>
+              <!-- <div class="col-2 "></div> -->
+              <div class="col-4">
+                <h3>Tender Amount :- {{viewObj.tenderAmount}}</h3>
+              </div>
+              <!-- <div class="col-2 "></div>    -->
+              <div class="col-4">
+                <h3>Closing Date :- {{viewObj.closingDate | date :'dd/MM/yyyy'}}</h3>
+              </div>
+           </div>
+        </mat-card-title>
+        <mat-card-actions>
+            <h3>Tender Name           : {{ viewObj.tenderName}} </h3>
+            <h3>Description           : {{ viewObj.description}} </h3>
+            <h3>Officer Incharge      : {{ viewObj.personName}} </h3>
+            <h3>Consultant Available  : 0</h3>
+
+        </mat-card-actions>
+        </mat-card>
+    </div>
+</div>
